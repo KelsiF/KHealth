@@ -3,3 +3,9 @@ version: '${project.version}'
 main: me.khealth.KHealth
 api-version: 1.20
 authors: [Kelsi]
+commands:
+  sethealth:
+    description: "Устанавливает здоровье игрока на указанное значение"
+    usage: "/sethealth <игрок> <хп>\nПример: /sethealth KelsiDev 17.0"
+    permission: khealth.health
+    permission-message: У вас недостаточно прав!

@@ -1,21 +1,14 @@
 package me.khealth.Listeners;
 
-import me.khealth.utils.Crawl;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.block.Block;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityToggleSwimEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 
 public class playerListener implements Listener {
 
@@ -24,63 +17,40 @@ public class playerListener implements Listener {
         this.plugin = plugin;
     }
 
-    private static final Map<UUID, Crawl> crowlingPlayers = new HashMap<>();
 
-    @EventHandler(ignoreCancelled = true)
-    public void onToggleSwim(EntityToggleSwimEvent event) {
-        if (Crawl.findPlayer(event.getEntity().getUniqueId()) != null) {
-            event.setCancelled(true);
-        }
-    }
-
-    @EventHandler(ignoreCancelled = true)
-    public void onToggleSneak(PlayerToggleSneakEvent event) {
-        Player player = event.getPlayer();
-        Crawl crawl = Crawl.findPlayer(player);
-
-        if (crawl != null && event.isSneaking()) {
-            crawl.stop();
-        }
-    }
-
-    @EventHandler(ignoreCancelled = true)
-    public void onClick(PlayerInteractEvent event) {
-        Player player = event.getPlayer();
-        Crawl crawl = Crawl.findPlayer(player);
-        Block clickedBlock = event.getClickedBlock();
-
-        if (crawl != null && clickedBlock != null && clickedBlock.getLocation().equals(crawl.getBarrierLocation())) {
-            crawl.update(clickedBlock.getLocation());
-
-            event.setCancelled(true);
-        }
-    }
 
     @EventHandler(ignoreCancelled = true)
     public void onMove(PlayerMoveEvent event) {
 
         Player player = event.getPlayer();
         double health = player.getHealth();
+        Location location = player.getLocation().add(0, 1, 0);
+        Location backLocation = player.getLocation().add(-2, 1, -2);
 
-        Crawl crawl = Crawl.findPlayer(player);
 
-        if (crawl != null) {
-            Location from = event.getFrom();
-            Location to = event.getTo();
-
-            if (from.getX() != to.getX() || from.getY() != to.getY() || from.getZ() != to.getZ()) {
-                crawl.update(from.clone());
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            if (health < 10.0) {
+                player.sendBlockChange(location, Material.BARRIER.createBlockData());
+                player.setSwimming(true);
+                Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                    for (double i = -4.0; i < 0; i++) {
+                        player.sendBlockChange(new Location(player.getWorld(), i, player.getLocation().getY(), i), Material.AIR.createBlockData());
+                    } for (double i = 1.0; i <= 4; i++) {
+                        player.sendBlockChange(new Location(player.getWorld(), i, player.getLocation().getY(), i), Material.AIR.createBlockData());
+                    }
+                }, 5);
             }
-        }
-
-        if (health < 10) {
-            Bukkit.getScheduler().runTaskLater(plugin, () -> {
-
-                crawl.start(player);
-
-            }, 30);
-        }
-
+            if (health >= 10.0) {
+                if (event.getPlayer().getLocation().getBlock().getType() != Material.WATER) {
+                    player.setSwimming(false);
+                    for (double i = -4.0; i < 0; i++) {
+                        player.sendBlockChange(new Location(player.getWorld(), i, player.getLocation().getY(), i), Material.AIR.createBlockData());
+                    } for (double i = 1.0; i <= 4; i++) {
+                        player.sendBlockChange(new Location(player.getWorld(), i, player.getLocation().getY(), i), Material.AIR.createBlockData());
+                    }
+                }
+            }
+        }, 5);
     }
 
 }
