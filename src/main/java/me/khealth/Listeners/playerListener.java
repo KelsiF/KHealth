@@ -32,23 +32,21 @@ public class playerListener implements Listener {
         Location backLocation = player.getLocation().add(-1, 1, -1);
 
 
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            if (health < 10.0) {
+        if (health < 10.0) {
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 player.sendBlockChange(location, Material.BARRIER.createBlockData());
-                player.sendBlockChange(location.add(-1, 0, -1), Material.AIR.createBlockData());
-                player.sendBlockChange(location.add(1, 0, 1), Material.AIR.createBlockData());
                 player.setSwimming(true);
-
-                player.addPotionEffect(PotionEffectType.BLINDNESS.createEffect(20, 1));
-                player.addPotionEffect(PotionEffectType.SLOW.createEffect(20, 1));
-                player.addPotionEffect(PotionEffectType.SLOW_DIGGING.createEffect(20, 1));
-            }
-            if (health >= 10.0) {
-                if (event.getPlayer().getLocation().getBlock().getType() != Material.WATER) {
-                    player.setSwimming(false);
+            }, 2);
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                player.addPotionEffect(PotionEffectType.DARKNESS.createEffect(100, 1));
+                player.addPotionEffect(PotionEffectType.SLOW.createEffect(100, 1));
+                player.addPotionEffect(PotionEffectType.SLOW_DIGGING.createEffect(100, 1));
+            }, 80);
+                if (health >= 10.0) {
+                    if (event.getPlayer().getLocation().getBlock().getType() != Material.WATER) {
+                        player.setSwimming(false);
+                    }
                 }
-            }
-        }, 2);
+        }
     }
-
 }

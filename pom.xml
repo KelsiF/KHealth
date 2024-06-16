@@ -6,7 +6,7 @@
 
     <groupId>me.khealth</groupId>
     <artifactId>KHealth</artifactId>
-    <version>1.1.0.1-demo</version>
+    <version>1.1.0.2-demo</version>
     <packaging>jar</packaging>
 
     <name>KHealth</name>
