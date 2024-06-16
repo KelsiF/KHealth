@@ -18,7 +18,21 @@ public class healthCommand implements CommandExecutor {
 
         if (player.hasPermission("khealth.health")) {
             if (args.length >= 1) {
-                target.setHealth(Double.parseDouble(args[1]));
+                if (args[0] != null) {
+                    if (args[1] != null) {
+                        final double newHealth = Double.parseDouble(args[1]);
+                        final double oldHealth = player.getHealth();
+                        target.setHealth(newHealth);
+
+                        player.sendMessage("Здоровье игрока ", target.getName(), " было изменено.");
+
+                        return true;
+                    } else {
+                        return false;
+                    }
+            } else {
+                    return false;
+                }
             }
         } else {
             player.sendMessage(Objects.requireNonNull(command.getPermissionMessage()));
