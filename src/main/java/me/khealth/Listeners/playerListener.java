@@ -8,6 +8,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+
+import java.util.Collection;
 
 
 public class playerListener implements Listener {
@@ -25,32 +29,26 @@ public class playerListener implements Listener {
         Player player = event.getPlayer();
         double health = player.getHealth();
         Location location = player.getLocation().add(0, 1, 0);
-        Location backLocation = player.getLocation().add(-2, 1, -2);
+        Location backLocation = player.getLocation().add(-1, 1, -1);
 
 
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             if (health < 10.0) {
                 player.sendBlockChange(location, Material.BARRIER.createBlockData());
+                player.sendBlockChange(location.add(-1, 0, -1), Material.AIR.createBlockData());
+                player.sendBlockChange(location.add(1, 0, 1), Material.AIR.createBlockData());
                 player.setSwimming(true);
-                Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                    for (double i = -4.0; i < 0; i++) {
-                        player.sendBlockChange(new Location(player.getWorld(), i, player.getLocation().getY(), i), Material.AIR.createBlockData());
-                    } for (double i = 1.0; i <= 4; i++) {
-                        player.sendBlockChange(new Location(player.getWorld(), i, player.getLocation().getY(), i), Material.AIR.createBlockData());
-                    }
-                }, 5);
+
+                player.addPotionEffect(PotionEffectType.BLINDNESS.createEffect(20, 1));
+                player.addPotionEffect(PotionEffectType.SLOW.createEffect(20, 1));
+                player.addPotionEffect(PotionEffectType.SLOW_DIGGING.createEffect(20, 1));
             }
             if (health >= 10.0) {
                 if (event.getPlayer().getLocation().getBlock().getType() != Material.WATER) {
                     player.setSwimming(false);
-                    for (double i = -4.0; i < 0; i++) {
-                        player.sendBlockChange(new Location(player.getWorld(), i, player.getLocation().getY(), i), Material.AIR.createBlockData());
-                    } for (double i = 1.0; i <= 4; i++) {
-                        player.sendBlockChange(new Location(player.getWorld(), i, player.getLocation().getY(), i), Material.AIR.createBlockData());
-                    }
                 }
             }
-        }, 5);
+        }, 2);
     }
 
 }
