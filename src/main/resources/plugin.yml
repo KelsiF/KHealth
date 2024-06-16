@@ -1,7 +1,7 @@
 name: KHealth
 version: '${project.version}'
 main: me.khealth.KHealth
-api-version: 1.20
+api-version: 1.18
 authors: [Kelsi]
 commands:
   sethealth:

@@ -9,8 +9,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffectType;
-import org.jetbrains.annotations.NotNull;
-
 
 public class playerListener implements Listener {
 
@@ -45,7 +43,7 @@ public class playerListener implements Listener {
                 }, 1);
             }, 2);
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                player.addPotionEffect(PotionEffectType.DARKNESS.createEffect(100, 1));
+                player.addPotionEffect(PotionEffectType.BLINDNESS.createEffect(100, 1));
                 player.addPotionEffect(PotionEffectType.SLOW.createEffect(100, 1));
                 player.addPotionEffect(PotionEffectType.SLOW_DIGGING.createEffect(100, 1));
             }, 80);
