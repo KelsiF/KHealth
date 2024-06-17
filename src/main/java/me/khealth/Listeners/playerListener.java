@@ -29,23 +29,23 @@ public class playerListener implements Listener {
         Player player = event.getPlayer();
         double health = player.getHealth();
 
+        int x = player.getLocation().getBlockX();
+        int y = player.getLocation().getBlockY();
+        int z = player.getLocation().getBlockZ();
+        Location loc = player.getLocation().add(0, 1, 0);
+        Material material = player.getWorld().getBlockAt(x,y,z).getType();
         if (health < fallHealth) {
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
 
-                int x = player.getLocation().getBlockX();
-                int y = player.getLocation().getBlockY();
-                int z = player.getLocation().getBlockZ();
 
-                Location loc = player.getLocation().add(0, 1, 0);
                 player.sendBlockChange(loc, Material.BARRIER.createBlockData());
                 player.setSwimming(true);
-                Material material = player.getWorld().getBlockAt(x,y,z).getType();
-                
 
-                Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                    player.sendBlockChange(loc, material.createBlockData());
-                }, 1);
+
             }, 1);
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                player.sendBlockChange(loc, material.createBlockData());
+            }, 10);
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 player.addPotionEffect(PotionEffectType.BLINDNESS.createEffect(100, 1));
                 player.addPotionEffect(PotionEffectType.SLOW.createEffect(100, 1));
