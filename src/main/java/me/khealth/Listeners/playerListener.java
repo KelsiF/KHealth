@@ -1,6 +1,7 @@
 package me.khealth.Listeners;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -22,36 +23,45 @@ public class playerListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onMove(PlayerMoveEvent event) {
 
+        String fallMessage = plugin.getConfig().getString("fall-message");
+        double fallHealth = plugin.getConfig().getDouble("fall-health");
+
         Player player = event.getPlayer();
         double health = player.getHealth();
-        Location location = player.getLocation().add(0, 1, 0);
-        Location backLocation = player.getLocation().add(-1, 1, -1);
-        int x = player.getLocation().getBlockX();
-        int y = player.getLocation().getBlockY();
-        int z = player.getLocation().getBlockZ();
 
-
-        if (health < 10.0) {
+        if (health < fallHealth) {
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                player.sendBlockChange(location, Material.BARRIER.createBlockData());
+
+                int x = player.getLocation().getBlockX();
+                int y = player.getLocation().getBlockY();
+                int z = player.getLocation().getBlockZ();
+
+                Location loc = player.getLocation();
+                player.sendBlockChange(loc.add(0, 1, 0), Material.BARRIER.createBlockData());
                 player.setSwimming(true);
                 Material material = player.getWorld().getBlockAt(x,y,z).getType();
-                Location loc = player.getLocation();
+                
 
                 Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                    player.sendBlockChange(loc, material.createBlockData());
+                    player.sendBlockChange(loc.add(0, 1, 0), material.createBlockData());
                 }, 1);
             }, 2);
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                player.sendMessage(ChatColor.RED + fallMessage);
                 player.addPotionEffect(PotionEffectType.BLINDNESS.createEffect(100, 1));
                 player.addPotionEffect(PotionEffectType.SLOW.createEffect(100, 1));
                 player.addPotionEffect(PotionEffectType.SLOW_DIGGING.createEffect(100, 1));
             }, 80);
-                if (health >= 10.0) {
-                    if (event.getPlayer().getLocation().getBlock().getType() != Material.WATER) {
-                        player.setSwimming(false);
-                    }
-                }
+        } else if (health >= fallHealth) {
+            player.setSwimming(false);
+            player.removePotionEffect(PotionEffectType.BLINDNESS);
+            player.removePotionEffect(PotionEffectType.SLOW);
+            player.removePotionEffect(PotionEffectType.SLOW_DIGGING);
+        } else if (health <= 0) {
+            player.setSwimming(false);
+            player.removePotionEffect(PotionEffectType.BLINDNESS);
+            player.removePotionEffect(PotionEffectType.SLOW);
+            player.removePotionEffect(PotionEffectType.SLOW_DIGGING);
         }
     }
 }

@@ -15,6 +15,9 @@ public final class KHealth extends JavaPlugin implements Listener {
         getServer().getPluginManager().registerEvents(new playerListener(this), this);
 
         getCommand("sethealth").setExecutor(new healthCommand());
+
+        getConfig().options().copyDefaults();
+        saveDefaultConfig();
     }
 
     @Override

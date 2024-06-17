@@ -6,13 +6,12 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
 public class healthCommand implements CommandExecutor {
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         Player player = null;
         if (sender instanceof Player) {
             player = (Player) sender;
@@ -36,7 +35,7 @@ public class healthCommand implements CommandExecutor {
                 return true;
             }
         } else {
-            player.sendMessage(Objects.requireNonNull(command.getPermissionMessage()));
+            player.sendMessage(ChatColor.RED + "У вас недостаточно прав!");
         }
 
         return true;
