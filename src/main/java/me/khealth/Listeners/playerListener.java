@@ -47,11 +47,13 @@ public class playerListener implements Listener {
                 }, 2);
             }, 2);
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                player.sendMessage(ChatColor.RED + fallMessage);
                 player.addPotionEffect(PotionEffectType.BLINDNESS.createEffect(100, 1));
                 player.addPotionEffect(PotionEffectType.SLOW.createEffect(100, 1));
                 player.addPotionEffect(PotionEffectType.SLOW_DIGGING.createEffect(100, 1));
             }, 80);
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                player.sendMessage(ChatColor.RED + fallMessage);
+            }, 1200);
         } else if (health >= fallHealth) {
             player.setSwimming(false);
             player.removePotionEffect(PotionEffectType.BLINDNESS);
