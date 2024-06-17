@@ -36,15 +36,15 @@ public class playerListener implements Listener {
                 int y = player.getLocation().getBlockY();
                 int z = player.getLocation().getBlockZ();
 
-                Location loc = player.getLocation();
-                player.sendBlockChange(loc.add(0, 1, 0), Material.BARRIER.createBlockData());
+                Location loc = player.getLocation().add(0, 1, 0);
+                player.sendBlockChange(loc, Material.BARRIER.createBlockData());
                 player.setSwimming(true);
                 Material material = player.getWorld().getBlockAt(x,y,z).getType();
                 
 
                 Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                    player.sendBlockChange(loc.add(0, 1, 0), material.createBlockData());
-                }, 1);
+                    player.sendBlockChange(loc, material.createBlockData());
+                }, 2);
             }, 2);
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 player.sendMessage(ChatColor.RED + fallMessage);

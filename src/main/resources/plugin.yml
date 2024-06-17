@@ -2,6 +2,7 @@ name: KHealth
 version: '${project.version}'
 main: me.khealth.KHealth
 api-version: 1.18
+website: "https://discord.gg/JJx3HGwyqd"
 authors: [Kelsi]
 commands:
   sethealth:
