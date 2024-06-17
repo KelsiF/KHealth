@@ -44,8 +44,8 @@ public class playerListener implements Listener {
 
                 Bukkit.getScheduler().runTaskLater(plugin, () -> {
                     player.sendBlockChange(loc, material.createBlockData());
-                }, 2);
-            }, 2);
+                }, 1);
+            }, 1);
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 player.addPotionEffect(PotionEffectType.BLINDNESS.createEffect(100, 1));
                 player.addPotionEffect(PotionEffectType.SLOW.createEffect(100, 1));
@@ -53,7 +53,7 @@ public class playerListener implements Listener {
             }, 80);
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 player.sendMessage(ChatColor.RED + fallMessage);
-            }, 1200);
+            }, 200);
         } else if (health >= fallHealth) {
             player.setSwimming(false);
             player.removePotionEffect(PotionEffectType.BLINDNESS);
